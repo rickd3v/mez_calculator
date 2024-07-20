@@ -12,6 +12,27 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final _formKey = GlobalKey<FormState>();
 
+  String displayText = "Resultado";
+
+  TextEditingController widthController = TextEditingController();
+  TextEditingController lengthController = TextEditingController();
+  TextEditingController heightController = TextEditingController();
+
+  void _calculate() {
+    //Calculate m²
+    double width = double.parse(widthController.text);
+    double length = double.parse(lengthController.text);
+    double result = width * length;
+
+    //Calculate space / 1.25
+    double supportSpace = length / 1.25;
+
+    setState(() {
+      displayText =
+          "Área: ${result.toString()}m² \n : ${supportSpace.toString()}";
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +58,8 @@ class _HomePageState extends State<HomePage> {
               child: Column(
                 children: [
                   TextFormField(
-                    //keyboardType: TextInputType.number,
+                    controller: widthController,
+                    keyboardType: TextInputType.number,
                     decoration: getFormsInputDecoration("Largura"),
                     validator: (String? value) {
                       if (value == null) {
@@ -50,6 +72,7 @@ class _HomePageState extends State<HomePage> {
                     height: 8,
                   ),
                   TextFormField(
+                    controller: lengthController,
                     keyboardType: TextInputType.number,
                     decoration: getFormsInputDecoration("Comprimento"),
                   ),
@@ -57,6 +80,7 @@ class _HomePageState extends State<HomePage> {
                     height: 8,
                   ),
                   TextFormField(
+                    controller: heightController,
                     keyboardType: TextInputType.number,
                     decoration: getFormsInputDecoration("Altura"),
                   ),
@@ -65,7 +89,7 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       ElevatedButton(
                         onPressed: () {
-                          buttonCalculate();
+                          _calculate();
                         },
                         child: Text('Calcular'),
                       ),
@@ -79,6 +103,14 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
+          Text(
+            displayText,
+            style: TextStyle(
+              color: CustomColors().getSecundaryColor(),
+              fontSize: 20,
+            ),
+            textAlign: TextAlign.center,
+          )
         ],
       ),
     );
